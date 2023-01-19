@@ -2,6 +2,7 @@
 const express = require('express');
 
 let indexRouter = require('./routes/index');
+let search_router = require('./routes/search');
 
 // Initialize express
 const app = express();
@@ -9,12 +10,16 @@ const app = express();
 // Set up a view engine
 app.set('view engine', 'ejs');
 
-
 // Set a static folder
 app.use(express.static('public'));
 
+// formData => req.body
+app.use(express.json()); //application/json
+app.use(express.urlencoded({extended: true}));
+
 // Define the index router
 app.use('/', indexRouter);
+app.use('/',search_router);
 
 //connecting to the db
 const mongoose = require("mongoose");
@@ -38,7 +43,6 @@ db.once("open",() => {
 db.on("error", ()=> {
     console.log("Connection to DB failed");
 });
-
 
 // Define the port number
 const PORT = 5000;
